@@ -1,7 +1,4 @@
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -53,8 +50,8 @@ public Frame(){
 
 	 
 	 model = new DefaultListModel<Object>();
-	 //for (int i = 0; i < 15; i++)
-	   //   model.addElement("THIS IS MY ELEMENT, THERE ARE MANY LIKE IT " + i);
+	 //for (int i = 0; i < 15; i)
+	   //   model.addElement("THIS IS MY ELEMENT, THERE ARE MANY LIKE IT "  i);
 	 
 	 actionPanel = new JPanel(new FlowLayout());
 	 listPanel = new JPanel(new FlowLayout());
@@ -66,11 +63,11 @@ public Frame(){
 	 //-----------------------------------------------
 	 
 	 
-	 	url_List.getSelectionModel().addListSelectionListener(e ->{
+/*	 	url_List.getSelectionModel().addListSelectionListener(e ->{
 		 
 		 urlToken = url_List.getSelectedValue();
 		 k = (String)urlToken;
-		 System.out.println("THis is m cast of token: " + k);
+		 System.out.println("THis is m cast of token: "  + k);
 		   try {
 			Desktop.getDesktop().browse(new URI(k));
 		} catch (IOException e1) {
@@ -82,7 +79,9 @@ public Frame(){
 		}
 
 		 
-	 });
+	 });*/
+	 	
+	 	
 	 
 	 // on double mouse click, pop open dialog with the selected image in it. 
 	 url_List.addMouseListener(new MouseAdapter() {
@@ -90,9 +89,9 @@ public Frame(){
 		        JList list = (JList)evt.getSource();
 		        if (evt.getClickCount() == 2) {
 		        	
-
-		            DialogImage d = new DialogImage();
-		             d.addImage(k);
+		        	System.out.println("here");
+		           new DialogImage();
+		            // d.addImage(k);
 		            int index = list.locationToIndex(evt.getPoint());
 		        } else if (evt.getClickCount() == 3) {
 

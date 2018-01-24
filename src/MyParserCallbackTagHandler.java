@@ -27,13 +27,13 @@ class MyParserCallbackTagHandler extends HTMLEditorKit.ParserCallback
         {
         	imageURL = a.getAttribute(HTML.Attribute.SRC);
         	passable_URL = (String)imageURL;
-            System.out.println ("This is my image info: " + passable_URL);
+            System.out.println ("This is my image info: " + imageURL.toString());
             if (imageURL != null)
             {        
-                String temp = passable_URL;
+                String temp = imageURL.toString();
                 if (temp.startsWith("html."))
                 {
-                    listPointer.addElement(passable_URL);
+                    listPointer.addElement(baseDomain + imageURL.toString());
                     System.out.println ("ELEMENT ADDED TO LIST");
                 }
                     else 

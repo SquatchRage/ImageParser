@@ -14,10 +14,10 @@ public class FindTags
     InputStreamReader streamReader;
     MyParserCallbackTagHandler tagH;
     String domain;
-    DefaultListModel<?> listPointer;
+    DefaultListModel listPointer;
 
     
-    FindTags (String webURL, DefaultListModel<?> listPointer)
+    FindTags (String webURL, DefaultListModel listPointer)
     {   
         this.listPointer = listPointer;
         try 
