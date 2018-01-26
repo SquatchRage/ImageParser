@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.awt.*;
@@ -20,23 +21,23 @@ public class Frame extends JFrame implements ActionListener
  JButton printButton;
  JTextField urlField;
  JLabel	urlFieldLabel;
- JList  url_List;
+ JList<Object>  url_List;
  JPanel actionPanel;
  JPanel listPanel;
- DefaultListModel model;
+ DefaultListModel<Object> model;
  FindTags tags;
  MyParserCallbackTagHandler image_url;
  DialogImage di;
- Object urlToken;
  Container cp;
- String k;
+ 
+ //https://www.fairmontstate.edu/collegeofscitech/about-us/faculty-staff
  
  @SuppressWarnings("unchecked")
 public Frame(){
-	 
-	 goButton = new JButton("GO");
+	 //creation of buttons, labels, textfields, lists and panels. 
+	 goButton = new JButton("Go");
 	 goButton.addActionListener(this);
-	 goButton.setActionCommand("GO");
+	 goButton.setActionCommand("Go");
 	 
 	 printButton = new JButton("Print");
 	 printButton.addActionListener(this);
@@ -60,44 +61,30 @@ public Frame(){
 	 url_List.setFixedCellWidth(700);
 	 url_List.setFixedCellHeight(45);
 	 JScrollPane sp = new JScrollPane(url_List);
+	 
 	 //-----------------------------------------------
-	 
-	 
-/*	 	url_List.getSelectionModel().addListSelectionListener(e ->{
-		 
-		 urlToken = url_List.getSelectedValue();
-		 k = (String)urlToken;
-		 System.out.println("THis is m cast of token: "  + k);
-		   try {
-			Desktop.getDesktop().browse(new URI(k));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (URISyntaxException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
-		 
-	 });*/
-	 	
-	 	
-	 
 	 // on double mouse click, pop open dialog with the selected image in it. 
+	 //If there are 2 left mouse clicks, call url from taghandler and use it with a DialogImage class arguement to make connection
 	 url_List.addMouseListener(new MouseAdapter() {
 		    public void mouseClicked(MouseEvent evt) {
-		        JList list = (JList)evt.getSource();
+		        JList<?> list = (JList<?>)evt.getSource();
 		        if (evt.getClickCount() == 2) {
 		        	
-		        	System.out.println("here");
-		           new DialogImage();
-		            // d.addImage(k);
+		        	//String clickedOnURL = MyParserCallbackTagHandler.passable_URL;
+		        	String url_To_Load = (String) url_List.getSelectedValue();
+		        	
+		        	try {
+						DialogImage.initUI(url_To_Load);
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        	System.out.println("\n" + "I am the clicked on URL " + url_To_Load + "\n");
+		         
 		            int index = list.locationToIndex(evt.getPoint());
-		        } else if (evt.getClickCount() == 3) {
-
-		            // Triple-click detected
-		            int index = list.locationToIndex(evt.getPoint());
-		        }
+		            System.out.println("I am index " + index);
+		        } 
 		    }
 		});
 			
@@ -121,7 +108,7 @@ public Frame(){
  @Override
  public void actionPerformed(ActionEvent AE) 
  {     
-	 if(AE.getActionCommand().equals("GO")){
+	 if(AE.getActionCommand().equals("Go")){
 		 
 		model.removeAllElements(); // If user input another URL and selects go, it clears the list before re-populating with new URLS
 		tags = new FindTags (urlField.getText().trim(), model);
