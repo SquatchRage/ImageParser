@@ -21,20 +21,20 @@ public class Frame extends JFrame implements ActionListener
  JButton printButton;
  JTextField urlField;
  JLabel	urlFieldLabel;
- JList  url_List;
+ JList<Object>  url_List;
  JPanel actionPanel;
  JPanel listPanel;
- DefaultListModel model;
+ DefaultListModel<Object> model;
  FindTags tags;
  MyParserCallbackTagHandler image_url;
  DialogImage di;
- Object urlToken;
  Container cp;
- String k;
+ 
+ //https://www.fairmontstate.edu/collegeofscitech/about-us/faculty-staff
  
  @SuppressWarnings("unchecked")
 public Frame(){
-	 
+	 //creation of buttons, labels, textfields, lists and panels. 
 	 goButton = new JButton("Go");
 	 goButton.addActionListener(this);
 	 goButton.setActionCommand("Go");
@@ -57,32 +57,33 @@ public Frame(){
 	 actionPanel = new JPanel(new FlowLayout());
 	 listPanel = new JPanel(new FlowLayout());
 	 
-	 url_List = new JList(model);
+	 url_List = new JList<Object>(model);
 	 url_List.setFixedCellWidth(700);
 	 url_List.setFixedCellHeight(45);
 	 JScrollPane sp = new JScrollPane(url_List);
+	 
 	 //-----------------------------------------------
-	 
-	 	
-	 
+
 	 // on double mouse click, pop open dialog with the selected image in it. 
+	 //If there are 2 left mouse clicks, call url from taghandler and use it with a DialogImage class arguement to make connection
 	 url_List.addMouseListener(new MouseAdapter() {
 		    public void mouseClicked(MouseEvent evt) {
-		        JList list = (JList)evt.getSource();
+		        JList<?> list = (JList<?>)evt.getSource();
 		        if (evt.getClickCount() == 2) {
 		        	
-		        	String clickedOnURL = MyParserCallbackTagHandler.passable_URL;
+		        	//String clickedOnURL = MyParserCallbackTagHandler.passable_URL;
+		        	String url_To_Load = (String) url_List.getSelectedValue();
 		        	
 		        	try {
-						DialogImage.initUI(clickedOnURL);
+						DialogImage.initUI(url_To_Load);
 					} catch (MalformedURLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-		        	System.out.println(clickedOnURL + "\n");
+		        	System.out.println("\n" + "I am the clicked on URL " + url_To_Load + "\n");
 		         
 		            int index = list.locationToIndex(evt.getPoint());
-		            System.out.println("I am index" + index);
+		            System.out.println("I am index " + index);
 		        } 
 		    }
 		});

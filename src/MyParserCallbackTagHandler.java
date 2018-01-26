@@ -10,37 +10,33 @@ class MyParserCallbackTagHandler extends HTMLEditorKit.ParserCallback
 {
     String baseDomain;
     Object imageURL;
-    DefaultListModel<String> listPointer;
+    DefaultListModel<String> list;
   static  String passable_URL;
     
     
     public MyParserCallbackTagHandler (String baseDomain, DefaultListModel<String> listPointer)
     {
      this.baseDomain = baseDomain;
-     this.listPointer = listPointer;
+     this.list = listPointer;
     }
         
     @Override
-    public void handleSimpleTag (HTML.Tag t, MutableAttributeSet img, int pos)
+    public void handleSimpleTag (HTML.Tag t, MutableAttributeSet a, int pos)
     {
         if (t == HTML.Tag.IMG)
         {
-        	imageURL = img.getAttribute(HTML.Attribute.SRC);
+        	imageURL = a.getAttribute(HTML.Attribute.SRC);
         	passable_URL = imageURL.toString();
             System.out.println ("This is my image info: " + passable_URL);
-            if (imageURL != null)
+            if (passable_URL != null)
             {        
-                String temp = imageURL.toString();
-                if (temp.startsWith("html."))
+                if (passable_URL.startsWith("HTML."))
                 {
-                    listPointer.addElement(baseDomain + passable_URL);
-                    System.out.println ("ELEMENT ADDED TO LIST");
+                	list.addElement(baseDomain + passable_URL);
                 }
                     else 
                 {         
-                    
-                    listPointer.addElement (passable_URL);
-                    System.out.println ("ELEMENT ADDED TO LIST 2");
+                    list.addElement (passable_URL);
                 }
             }
         }
