@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.awt.*;
@@ -34,9 +35,9 @@ public class Frame extends JFrame implements ActionListener
  @SuppressWarnings("unchecked")
 public Frame(){
 	 
-	 goButton = new JButton("GO");
+	 goButton = new JButton("Go");
 	 goButton.addActionListener(this);
-	 goButton.setActionCommand("GO");
+	 goButton.setActionCommand("Go");
 	 
 	 printButton = new JButton("Print");
 	 printButton.addActionListener(this);
@@ -56,31 +57,12 @@ public Frame(){
 	 actionPanel = new JPanel(new FlowLayout());
 	 listPanel = new JPanel(new FlowLayout());
 	 
-	 url_List = new JList<Object>(model);
+	 url_List = new JList(model);
 	 url_List.setFixedCellWidth(700);
 	 url_List.setFixedCellHeight(45);
 	 JScrollPane sp = new JScrollPane(url_List);
 	 //-----------------------------------------------
 	 
-	 
-/*	 	url_List.getSelectionModel().addListSelectionListener(e ->{
-		 
-		 urlToken = url_List.getSelectedValue();
-		 k = (String)urlToken;
-		 System.out.println("THis is m cast of token: "  + k);
-		   try {
-			Desktop.getDesktop().browse(new URI(k));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (URISyntaxException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		 
-	 });*/
-	 	
 	 	
 	 
 	 // on double mouse click, pop open dialog with the selected image in it. 
@@ -89,15 +71,19 @@ public Frame(){
 		        JList list = (JList)evt.getSource();
 		        if (evt.getClickCount() == 2) {
 		        	
-		        	System.out.println("here");
-		           new DialogImage();
-		            // d.addImage(k);
+		        	String clickedOnURL = MyParserCallbackTagHandler.passable_URL;
+		        	
+		        	try {
+						DialogImage.initUI(clickedOnURL);
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        	System.out.println(clickedOnURL + "\n");
+		         
 		            int index = list.locationToIndex(evt.getPoint());
-		        } else if (evt.getClickCount() == 3) {
-
-		            // Triple-click detected
-		            int index = list.locationToIndex(evt.getPoint());
-		        }
+		            System.out.println("I am index" + index);
+		        } 
 		    }
 		});
 			
@@ -121,7 +107,7 @@ public Frame(){
  @Override
  public void actionPerformed(ActionEvent AE) 
  {     
-	 if(AE.getActionCommand().equals("GO")){
+	 if(AE.getActionCommand().equals("Go")){
 		 
 		model.removeAllElements(); // If user input another URL and selects go, it clears the list before re-populating with new URLS
 		tags = new FindTags (urlField.getText().trim(), model);

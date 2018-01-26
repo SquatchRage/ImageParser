@@ -1,34 +1,48 @@
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class DialogImage {
-	
-	MyParserCallbackTagHandler tag;
 
-	public void addImage(String IMAGE_URL){
-		tag = new MyParserCallbackTagHandler(IMAGE_URL, null);
-	   try
-       {
-           JDialog dialog = new JDialog();     
-           dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-           dialog.setTitle("Image Loading Demo");
+   // private static final String BACKHGROUND_IMAGE_URL = "http://cache2.allpostersimages.com/p/LRG/27/2740/AEPND00Z/affiches/blue-fiber-optic-wires-against-black-background.jpg";
 
-          // dialog.add(new JLabel(new ImageIcon(ImageIO.read(getClass().getResourceAsStream(tag.imageURL.toString())))));
-           dialog.add(new JLabel(new ImageIcon(ImageIO.read(getClass().getResourceAsStream(IMAGE_URL)))));
+    protected static void initUI(String BACKHGROUND_IMAGE_URL) throws MalformedURLException {
+        JDialog dialog = new JDialog((Frame) null, DialogImage.class.getSimpleName());
+        dialog.setModal(true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        final ImageIcon backgroundImage = new ImageIcon(new URL(BACKHGROUND_IMAGE_URL));
+        JPanel mainPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+
+            @Override
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                size.width = Math.max(backgroundImage.getIconWidth(), size.width);
+                size.height = Math.max(backgroundImage.getIconHeight(), size.height);
+
+                return size;
+            }
+        };
+        dialog.add(mainPanel);
+        dialog.setSize(400, 300);
+        dialog.setVisible(true);
+    }
 
 
-           dialog.pack();
-           dialog.setLocationByPlatform(true);
-           dialog.setVisible(true);
-       } 
-       catch (IOException e) 
-       {
-           e.printStackTrace();
-       }
-	
-	}
-}
+  
+        
+    }
