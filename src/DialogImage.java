@@ -14,7 +14,6 @@ import javax.swing.SwingUtilities;
 
 public class DialogImage {
 
-   // private static final String BACKHGROUND_IMAGE_URL = "http://cache2.allpostersimages.com/p/LRG/27/2740/AEPND00Z/affiches/blue-fiber-optic-wires-against-black-background.jpg";
 
     protected static void initUI(String BACKHGROUND_IMAGE_URL) throws MalformedURLException {
         JDialog dialog = new JDialog((Frame) null, DialogImage.class.getSimpleName());
