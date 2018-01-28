@@ -4,6 +4,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -13,7 +17,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class Frame extends JFrame implements ActionListener 
+public class Frame extends JFrame implements ActionListener, Printable 
 {
 
 	private static final long serialVersionUID = 8417262671424751407L;
@@ -24,10 +28,12 @@ public class Frame extends JFrame implements ActionListener
  JList<Object>  url_List;
  JPanel actionPanel;
  JPanel listPanel;
- DefaultListModel<Object> model;
+ DefaultListModel model;
  FindTags tags;
  MyParserCallbackTagHandler image_url;
  DialogImage di;
+ Print p;
+ String url_To_Load;
  Container cp;
  
  //https://www.fairmontstate.edu/collegeofscitech/about-us/faculty-staff
@@ -50,7 +56,7 @@ public Frame(){
      urlField.setPreferredSize( new Dimension( 200, 24 ) );
 
 	 
-	 model = new DefaultListModel<Object>();
+	 model = new DefaultListModel();
 	 //for (int i = 0; i < 15; i)
 	   //   model.addElement("THIS IS MY ELEMENT, THERE ARE MANY LIKE IT "  i);
 	 
@@ -71,8 +77,7 @@ public Frame(){
 		        JList<?> list = (JList<?>)evt.getSource();
 		        if (evt.getClickCount() == 2) {
 		        	
-		        	//String clickedOnURL = MyParserCallbackTagHandler.passable_URL;
-		        	String url_To_Load = (String) url_List.getSelectedValue();
+		        	 url_To_Load = (String) url_List.getSelectedValue();
 		        	
 		        	try {
 						DialogImage.initUI(url_To_Load);
@@ -110,11 +115,48 @@ public Frame(){
  {     
 	 if(AE.getActionCommand().equals("Go")){
 		 
-		model.removeAllElements(); // If user input another URL and selects go, it clears the list before re-populating with new URLS
+		model.removeAllElements(); // If user selects go, it clears the list before re-populating with new URLS
 		tags = new FindTags (urlField.getText().trim(), model);
 	 }
 	 
+	 if(AE.getActionCommand().equals("Print")){
+		 
+		 PrinterJob job = PrinterJob.getPrinterJob();
+		 job.setPrintable(this);
+		 boolean ok = job.printDialog();
+		 if (ok) {
+		 try {
+		 job.print();
+		 } catch (PrinterException ex) {
+			 System.out.println("error");	}}}	 
+			 
+	 
  }
+ 
+ public int print(Graphics g, PageFormat pf, int page) throws
+ PrinterException {
+
+if (page > 0) { /* We have only one page, and 'page' is zero-based */
+return NO_SUCH_PAGE;
+}
+
+/* User (0,0) is typically outside the imageable area, so we must
+* translate by the X and Y values in the PageFormat to avoid clipping
+*/
+Graphics2D g2d = (Graphics2D)g;
+g2d.translate(pf.getImageableX(), pf.getImageableY());
+
+/* Now print the window and its visible contents */
+url_List.printAll(g);
+
+/* tell the caller that this page is part of the printed document */
+return PAGE_EXISTS;
+}
+
+
+
+
+
 
  
  void setUp ()
