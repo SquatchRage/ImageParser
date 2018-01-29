@@ -23,8 +23,10 @@ class MyParserCallbackTagHandler extends HTMLEditorKit.ParserCallback
     @Override
     public void handleSimpleTag (HTML.Tag t, MutableAttributeSet a, int pos)
     {
+    	// If the tag is an Image tag
         if (t == HTML.Tag.IMG)
-        {
+        {	
+        	//get its source
         	imageURL = a.getAttribute(HTML.Attribute.SRC);
         	passable_URL = imageURL.toString();
             System.out.println ("This is my image info: " + passable_URL);

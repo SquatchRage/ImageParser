@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -56,8 +58,14 @@ public Frame(){
 	 urlField = new JTextField(30);
 	 urlField.setEditable(true);
      urlField.setPreferredSize( new Dimension( 200, 24 ) );
-
-	 
+     urlField.setText("Hey Ted!");
+     //Set focus to txtfield
+     addWindowListener( new WindowAdapter() {
+    	    public void windowOpened( WindowEvent e ){
+    	        urlField.requestFocus();
+    	    }
+    	}); 
+     
 	 model = new DefaultListModel();
 	 //for (int i = 0; i < 15; i)
 	   //   model.addElement("THIS IS MY ELEMENT, THERE ARE MANY LIKE IT "  i);
@@ -65,8 +73,8 @@ public Frame(){
 	 actionPanel = new JPanel(new FlowLayout());
 	 listPanel = new JPanel(new FlowLayout());
 	 
-	 url_List = new JList<Object>(model);
-	 url_List.setFixedCellWidth(890);
+	 url_List = new JList(model);
+	 url_List.setFixedCellWidth(1200);
 	 url_List.setFixedCellHeight(53);
 	 
 	 JScrollPane sp = new JScrollPane(url_List);
@@ -77,7 +85,7 @@ public Frame(){
 	 //If there are 2 left mouse clicks, call url from taghandler and use it with a DialogImage class arguement to make connection
 	 url_List.addMouseListener(new MouseAdapter() {
 		    public void mouseClicked(MouseEvent evt) {
-		        JList<?> list = (JList<?>)evt.getSource();
+		        JList list = (JList)evt.getSource();
 		        if (evt.getClickCount() == 2) {
 		        	
 		        	 url_To_Load = (String) url_List.getSelectedValue();
@@ -104,13 +112,16 @@ public Frame(){
 	 actionPanel.add(urlField);
 	 actionPanel.add(goButton);
 	 actionPanel.add(printButton);
-
+	 
 	 cp = getContentPane();
+	 cp.setSize(900, 900);
+
 	 cp.add(listPanel, BorderLayout.NORTH);
 	 cp.add(sp, BorderLayout.CENTER);
 	 cp.add(actionPanel, BorderLayout.SOUTH);
 	 
-	 
+     urlField.requestFocusInWindow();
+
 	 setUp();
  }
  
@@ -153,13 +164,14 @@ g2d.translate(pf.getImageableX(), pf.getImageableY());
 /* Now print the list and its visible contents */
 url_List.printAll(g);
 
+
 /* tell the caller that this page is part of the printed document */
 return PAGE_EXISTS;
 }
 
 
 
-
+// This method just gives you the Right Click functionality instead of having to use control options.  
  public static void addTo(JTextField txtField) 
  {
      JPopupMenu popup = new JPopupMenu();
@@ -231,8 +243,8 @@ return PAGE_EXISTS;
      tk = Toolkit.getDefaultToolkit ();
      d = tk.getScreenSize ();
      
-     setSize (d.width/2, d.height/2);
-     setLocation (d.width/4, d.height/4);
+     setSize (d.width/1, d.height/1);
+     setLocation (d.width/2, d.height/2);
      setTitle ("Image Finder");
      setVisible (true);
  	}
