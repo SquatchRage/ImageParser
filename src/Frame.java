@@ -67,8 +67,8 @@ public Frame(){
 	 
 	 url_List = new JList<Object>(model);
 	 url_List.setFixedCellWidth(890);
-	// url_List.
 	 url_List.setFixedCellHeight(53);
+	 
 	 JScrollPane sp = new JScrollPane(url_List);
 	 
 	 //-----------------------------------------------
@@ -107,6 +107,7 @@ public Frame(){
 
 	 cp = getContentPane();
 	 cp.add(listPanel, BorderLayout.NORTH);
+	 cp.add(sp, BorderLayout.CENTER);
 	 cp.add(actionPanel, BorderLayout.SOUTH);
 	 
 	 
