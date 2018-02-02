@@ -28,7 +28,7 @@ public class Frame extends JFrame implements ActionListener, Printable
  JButton printButton;
  JTextField urlField;
  JLabel	urlFieldLabel;
- JList<Object>  url_List;
+ JList  url_List;
  JPanel actionPanel;
  JPanel listPanel;
  DefaultListModel model;
@@ -37,6 +37,7 @@ public class Frame extends JFrame implements ActionListener, Printable
  DialogImage di;
  String url_To_Load;
  Container cp;
+ int count = 0;
  
  //---------------------TEST WEBISTE------------------------------------
  //https://www.fairmontstate.edu/collegeofscitech/about-us/faculty-staff
@@ -58,7 +59,7 @@ public Frame(){
 	 urlField = new JTextField(30);
 	 urlField.setEditable(true);
      urlField.setPreferredSize( new Dimension( 200, 24 ) );
-     urlField.setText("Hey Ted!");
+    // urlField.setText("Hey Ted!");
      //Set focus to txtfield
      addWindowListener( new WindowAdapter() {
     	    public void windowOpened( WindowEvent e ){
@@ -72,11 +73,7 @@ public Frame(){
 	 
 	 actionPanel = new JPanel(new FlowLayout());
 	 listPanel = new JPanel(new FlowLayout());
-	 
 	 url_List = new JList(model);
-	 url_List.setFixedCellWidth(1200);
-	 url_List.setFixedCellHeight(53);
-	 
 	 JScrollPane sp = new JScrollPane(url_List);
 	 
 	 //-----------------------------------------------
@@ -89,7 +86,7 @@ public Frame(){
 		        if (evt.getClickCount() == 2) {
 		        	
 		        	 url_To_Load = (String) url_List.getSelectedValue();
-		        	
+		           	
 		        	try {
 						DialogImage.initUI(url_To_Load);
 					} catch (MalformedURLException e) {
@@ -104,7 +101,7 @@ public Frame(){
 		    }
 		});
 			
-	 addTo( urlField); 
+	 rightClick( urlField); 
 	 
 	 listPanel.add(sp);
 	 
@@ -148,31 +145,27 @@ public Frame(){
 	 
  }
  
- public int print(Graphics g, PageFormat pf, int page) throws
- PrinterException {
-
-if (page > 0) { /* We have only one page, and 'page' is zero-based */
-return NO_SUCH_PAGE;
-}
-
-/* User (0,0) is typically outside the imageable area, so we must
-* translate by the X and Y values in the PageFormat to avoid clipping
-*/
-Graphics2D g2d = (Graphics2D)g;
-g2d.translate(pf.getImageableX(), pf.getImageableY());
-
-/* Now print the list and its visible contents */
-url_List.printAll(g);
+ private int linesPerPage = 45;
 
 
-/* tell the caller that this page is part of the printed document */
-return PAGE_EXISTS;
-}
+ public int print(Graphics g, PageFormat pf, int pageIndex) {
+   if (pageIndex * linesPerPage >= model.getSize())
+     return NO_SUCH_PAGE;
+   Graphics2D g2 = (Graphics2D) g;
+   g2.setFont(new Font("Serif", Font.PLAIN, 16));
+   g2.setPaint(Color.black);
+   int x = 100;
+   int y = 100;
+   for (int i = linesPerPage * pageIndex; i < model.getSize()
+       && i < linesPerPage * (pageIndex + 1); i++) {
+     g2.drawString(( model).get(i).toString(), x, y);
+     y += 45;
+   }
+   return PAGE_EXISTS;
+ }
 
-
-
-// This method just gives you the Right Click functionality instead of having to use control options.  
- public static void addTo(JTextField txtField) 
+// This method just gives you the Right Click functionality instead of having to use control [Button] options
+ public static void rightClick(JTextField txtField) 
  {
      JPopupMenu popup = new JPopupMenu();
      UndoManager undoManager = new UndoManager();
@@ -243,8 +236,8 @@ return PAGE_EXISTS;
      tk = Toolkit.getDefaultToolkit ();
      d = tk.getScreenSize ();
      
-     setSize (d.width/1, d.height/1);
-     setLocation (d.width/2, d.height/2);
+     setSize (d.width/2, d.height/2);
+     setLocation (d.width/4, d.height/4);
      setTitle ("Image Finder");
      setVisible (true);
  	}
